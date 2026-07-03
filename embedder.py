@@ -40,6 +40,7 @@ def compare_new_face(img,vectors,model,treshold=1.5):
     """
 
     new_vector=model(img)
+    new_vector=new_vector.numpy()
 
     indexer=faiss.IndexFlatL2(512)
     indexer.add(vectors)
@@ -60,7 +61,7 @@ def get_vector_from_face(img,model):
     """
 
     new_vector=model(img)
-    return new_vector
+    return new_vector.numpy()
 
 def open_img_as_tensor(img_path):
     """
@@ -81,9 +82,10 @@ def open_numpy_as_tensor(numpy_img):
     ВХОД: Изображение в формате numpy
     ВЫХОД: Изображение в формате тензора
     """
+    numpy_img=torch.from_numpy(numpy_img)
     trans=transforms.Compose([
         transforms.Resize((112,112)),
-        transforms.ToTensor()
+        #transforms.ToTensor()
     ])
 
     img=trans(numpy_img)
