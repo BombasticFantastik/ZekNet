@@ -2,6 +2,7 @@ embedder_env
 .ipynb_checkpoints
 config.yaml
 w600k_r50.onnx
+__pycache__
 venv
 faces
 scrfd_500m_bnkps.onnx
