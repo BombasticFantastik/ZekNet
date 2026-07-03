@@ -34,6 +34,11 @@ class BuffaloModel(Module):
         return output
     
 def compare_new_face(img,vectors,model,treshold=1.5):
+    """
+    ВХОД: Изображения лица,все вектора, модель для векторизации
+    ВЫХОД: Индекс наиболее схожего человека из переданного массива векторов
+    """
+
     new_vector=model(img)
 
     indexer=faiss.IndexFlatL2(512)
@@ -42,15 +47,27 @@ def compare_new_face(img,vectors,model,treshold=1.5):
     similarities, indices=indexer.search(x=new_vector,k=1)
 
     if similarities[0].item()<treshold:
-        return True
+        return indices[0].item()
     else:
-        return False
+        print("ТАКОЙ ЧЕЛОВЕК НЕ НАЙДЕН")
+        return 0
+        
 
 def get_vector_from_face(img,model):
+    """
+    ВХОД: Изображения лица в формате тензора
+    ВЫХОД: Вектор лица 
+    """
+
     new_vector=model(img)
     return new_vector
 
 def open_img_as_tensor(img_path):
+    """
+    ВХОД: Путь до изображения
+    ВЫХОД: Изображение в формате тензора
+    """
+
     trans=transforms.Compose([
         transforms.Resize((112,112)),
         transforms.ToTensor()
@@ -60,6 +77,10 @@ def open_img_as_tensor(img_path):
     return img.unsqueeze(0)
 
 def open_numpy_as_tensor(numpy_img):
+    """
+    ВХОД: Изображение в формате numpy
+    ВЫХОД: Изображение в формате тензора
+    """
     trans=transforms.Compose([
         transforms.Resize((112,112)),
         transforms.ToTensor()
