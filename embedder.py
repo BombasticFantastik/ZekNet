@@ -65,20 +65,6 @@ def get_vector_from_face(img,model):
     new_vector=model(img)
     return new_vector.numpy()
 
-# def open_img_as_tensor(img_path):
-#     """
-#     ВХОД: Путь до изображения
-#     ВЫХОД: Изображение в формате тензора
-#     """
-
-#     trans=transforms.Compose([
-#         transforms.Resize((112,112)),
-#         transforms.ToTensor()
-#     ])
-
-#     img=trans(PIL.Image.open(img_path))
-#     return img.unsqueeze(0)
-
 def open_numpy_as_tensor(numpy_img):
     """
     ВХОД: Изображение в формате numpy
@@ -91,24 +77,7 @@ def open_numpy_as_tensor(numpy_img):
     return img.unsqueeze(0)
 
 
-if __name__ == "__main__":
 
-    #тест 1 - запуск модели
-    embedder=BuffaloModel('w600k_r50.onnx')
-
-    #тест 2 - получение вектора из фото
-    test_img=open_img_as_tensor(img_path=files_option['demonstration_img'])
-    vector=get_vector_from_face(img=test_img,model=embedder)
-    print(vector.shape)
-
-    #тест 3 - сравнение нового фото со всей базой 
-    embendings=None# заменить когда будет готово получение вектора из базы
-    if embendings!=None:
-        compare_new_face(img=test_img,vectors=embendings,model=embedder)
-    else:
-        pass
-
-    print('УСПЕШНО!')
 
 
 
