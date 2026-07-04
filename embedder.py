@@ -3,7 +3,9 @@ from torch.nn import Module
 import faiss
 import onnxruntime as ort
 import yaml
-from torchvision import transforms
+import cv2
+import numpy as np
+
 import PIL
 
 option_path='config.yaml'
@@ -63,32 +65,29 @@ def get_vector_from_face(img,model):
     new_vector=model(img)
     return new_vector.numpy()
 
-def open_img_as_tensor(img_path):
-    """
-    ВХОД: Путь до изображения
-    ВЫХОД: Изображение в формате тензора
-    """
+# def open_img_as_tensor(img_path):
+#     """
+#     ВХОД: Путь до изображения
+#     ВЫХОД: Изображение в формате тензора
+#     """
 
-    trans=transforms.Compose([
-        transforms.Resize((112,112)),
-        transforms.ToTensor()
-    ])
+#     trans=transforms.Compose([
+#         transforms.Resize((112,112)),
+#         transforms.ToTensor()
+#     ])
 
-    img=trans(PIL.Image.open(img_path))
-    return img.unsqueeze(0)
+#     img=trans(PIL.Image.open(img_path))
+#     return img.unsqueeze(0)
 
 def open_numpy_as_tensor(numpy_img):
     """
     ВХОД: Изображение в формате numpy
     ВЫХОД: Изображение в формате тензора
     """
-    numpy_img=torch.from_numpy(numpy_img)
-    trans=transforms.Compose([
-        transforms.Resize((112,112)),
-        #transforms.ToTensor()
-    ])
-
-    img=trans(numpy_img)
+    numpy_img=cv2.resize(numpy_img,(112,112))
+    numpy_img=numpy_img.astype('float32')/255.0
+    numpy_img=numpy_img.transpose(2,0,1)
+    img=torch.from_numpy(numpy_img)
     return img.unsqueeze(0)
 
 
